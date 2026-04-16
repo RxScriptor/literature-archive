@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mRNA vaccines · CD8 priming · Brief</title>
+<meta name="description" content="Jo et al. Nature 2026 — mRNA-LNP 백신의 CD8+ T cell priming 비전형 경로: cDC1/cDC2 redundancy + type I IFN 의존 cross-dressing">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+:root{
+  /* RxScriptor Clinical White */
+  --bg:#F8F9FC;
+  --white:#FFFFFF;
+  --ink:#1A2E5A;
+  --ink2:#2F3E5F;
+  --ink3:#828C9B;
+  --ink4:#B4BCCB;
+  --rule:#DDE0ED;
+  --rule2:#C4CBDB;
+  --accent:#E8365D;
+  --accent-bg:rgba(232,54,93,.06);
+  --accent-bd:rgba(232,54,93,.3);
+  --steel:#5B8DB8;
+  --steel-bg:rgba(91,141,184,.08);
+  --steel-bd:rgba(91,141,184,.35);
+  /* Category colors (from dashboard) */
+  --cat-vaccine:#D85A30;
+  --cat-vaccine-bg:rgba(216,90,48,.08);
+  --cat-vaccine-bd:rgba(216,90,48,.3);
+  --cat-mrna:#8A3A0E;
+  --cat-mrna-bg:rgba(139,58,14,.08);
+  --cat-mrna-bd:rgba(139,58,14,.3);
+  /* Limitation red */
+  --red:#991B1B;
+  --red-bg:#FEF2F2;
+  --red-bd:#FCA5A5;
+  --red-text:#7F1D1D;
+  --red-mid:#F87171;
+  --sans:'Pretendard','Noto Sans KR',sans-serif;
+  --mono:'DM Mono',monospace;
+  --brand:'Syne',sans-serif;
+  --serif:'Crimson Pro',serif;
+  --r:6px;--rl:10px;--rp:100px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:14px;font-weight:400;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+.topbar{height:3px;width:100%;background:var(--ink);}
+
+/* HEADER */
+.hdr{background:rgba(248,249,252,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--rule);padding:0 40px;height:52px;
+  display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;}
+.hdr-brand{display:flex;align-items:baseline;gap:1px;text-decoration:none;padding-right:14px;border-right:1px solid var(--rule);}
+.hdr-brand .rx{font-family:var(--brand);font-weight:800;font-size:16px;color:var(--ink);letter-spacing:-.02em;}
+.hdr-brand .sc{font-family:var(--serif);font-weight:600;font-style:italic;font-size:15px;color:var(--accent);letter-spacing:-.01em;}
+.hdr-back{font-family:var(--mono);font-size:11px;color:var(--ink3);
+  text-decoration:none;padding:5px 10px;border-radius:var(--r);border:1px solid var(--rule2);transition:all .15s;}
+.hdr-back:hover{color:var(--ink2);border-color:var(--ink);background:var(--white);}
+.hdr-path{font-family:var(--mono);font-size:11px;color:var(--ink4);}
+.hdr-path b{color:var(--ink3);}
+.hdr-right{margin-left:auto;display:flex;gap:8px;align-items:center;}
+.hdr-doi{font-family:var(--mono);font-size:10px;color:var(--accent);text-decoration:none;
+  padding:4px 10px;border-radius:var(--r);border:1px solid var(--accent-bd);background:var(--accent-bg);transition:all .15s;}
+.hdr-doi:hover{background:var(--accent);color:var(--white);}
+
+/* HERO - Magazine spread */
+.hero-wrap{max-width:1200px;margin:0 auto;padding:60px 40px 40px;
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.hero-left{display:flex;flex-direction:column;}
+.hero-brief-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:20px;text-transform:uppercase;display:flex;align-items:center;gap:12px;}
+.hero-brief-lbl::before{content:'';width:30px;height:1px;background:var(--accent);}
+.hero-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.hcat{font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  padding:3px 10px;border-radius:var(--rp);border:1px solid;text-transform:uppercase;}
+.hero-title{font-family:var(--serif);font-size:36px;font-weight:600;color:var(--ink);line-height:1.18;
+  letter-spacing:-.015em;margin-bottom:18px;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-dek{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:24px;}
+.hero-dek b{color:var(--accent);font-weight:600;}
+.hero-meta{display:flex;flex-direction:column;gap:6px;
+  padding-top:18px;border-top:1px solid var(--rule);}
+.hmeta-row{display:flex;gap:10px;font-family:var(--mono);font-size:11px;color:var(--ink3);}
+.hmeta-row b{color:var(--ink);font-family:var(--mono);letter-spacing:-.01em;}
+.hmeta-row .k{color:var(--ink4);width:80px;flex-shrink:0;letter-spacing:.1em;text-transform:uppercase;font-size:10px;}
+.hmeta-journal{font-family:var(--brand);font-weight:700;}
+
+/* Infographic — hero right */
+.infographic{aspect-ratio:16/9;position:relative;border:1px solid var(--rule2);border-radius:var(--rl);overflow:hidden;
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(26,46,90,.06);}
+.infographic::after{content:'';position:absolute;top:0;left:0;width:100%;height:4px;
+  background:linear-gradient(90deg,var(--steel) 0%,var(--accent) 100%);z-index:3;}
+.infographic img{width:100%;height:100%;object-fit:contain;display:block;}
+.ig-overlay{position:absolute;top:14px;left:18px;display:flex;gap:8px;align-items:center;z-index:2;
+  background:rgba(255,255,255,.8);padding:4px 10px;border-radius:var(--rp);backdrop-filter:blur(8px);}
+.ig-lbl{font-family:var(--mono);font-size:9px;color:var(--steel);letter-spacing:.2em;text-transform:uppercase;}
+.ig-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+.ip-inner{text-align:center;padding:20px;}
+.ip-icon{font-family:var(--brand);font-size:56px;font-weight:800;color:var(--ink4);letter-spacing:-.04em;line-height:1;}
+.ip-title{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.15em;text-transform:uppercase;margin-top:16px;}
+.ip-sub{font-size:11px;color:var(--ink4);margin-top:6px;}
+.ip-specs{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+.ip-chip{font-family:var(--mono);font-size:9px;color:var(--steel);
+  background:var(--steel-bg);border:1px solid var(--steel-bd);padding:2px 8px;border-radius:var(--rp);letter-spacing:.06em;}
+
+/* TLDR */
+.tldr-wrap{max-width:1200px;margin:0 auto;padding:0 40px;}
+.tldr-panel{background:var(--white);border:1px solid var(--rule);
+  border-radius:var(--rl);padding:22px 26px;position:relative;
+  box-shadow:0 2px 12px rgba(26,46,90,.04);}
+.tldr-panel::before{content:'';position:absolute;top:16px;bottom:16px;left:0;width:3px;
+  background:var(--accent);border-radius:0 2px 2px 0;}
+.tldr-lbl{font-family:var(--brand);font-size:11px;font-weight:800;letter-spacing:.25em;color:var(--accent);margin-bottom:12px;text-transform:uppercase;}
+.tldr-body{font-size:14px;color:var(--ink);line-height:1.75;max-width:920px;}
+.tldr-body b{color:var(--accent);font-weight:600;}
+.tldr-body em{font-style:italic;color:var(--steel);}
+
+/* BODY GRID */
+.body-wrap{max-width:1200px;margin:0 auto;padding:40px 40px 80px;
+  display:grid;grid-template-columns:1fr 280px;gap:40px;align-items:start;}
+
+/* Section headers */
+.p-sec-hdr{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;
+  padding-bottom:12px;border-bottom:1px solid var(--rule2);}
+.p-sec-num{font-family:var(--serif);font-style:italic;font-size:20px;font-weight:600;color:var(--steel);letter-spacing:-.01em;}
+.p-sec-ttl{font-family:var(--brand);font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+.p-sec-sub{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink4);letter-spacing:.1em;}
+
+.section-block{margin-bottom:40px;}
+
+/* Key findings cards */
+.kf-list{display:flex;flex-direction:column;gap:14px;}
+.kf-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--rl);
+  padding:22px 24px;position:relative;overflow:hidden;transition:all .2s;
+  box-shadow:0 2px 8px rgba(26,46,90,.03);}
+.kf-card:hover{border-color:var(--rule2);box-shadow:0 4px 16px rgba(26,46,90,.06);}
+.kf-card-hdr{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.kf-num{font-family:var(--serif);font-style:italic;font-size:20px;font-weight:600;color:var(--accent);line-height:1;letter-spacing:-.02em;}
+.kf-tag{font-family:var(--mono);font-size:9px;padding:2px 8px;
+  border-radius:var(--rp);border:1px solid;letter-spacing:.06em;}
+.kf-head{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);
+  margin-bottom:10px;letter-spacing:-.01em;line-height:1.35;}
+.kf-body{font-size:13.5px;color:var(--ink2);line-height:1.75;}
+.kf-body b{color:var(--ink);font-weight:600;}
+.kf-body em{font-style:italic;color:var(--steel);}
+.kf-body code{font-family:var(--mono);font-size:11.5px;background:var(--bg);
+  padding:1px 6px;border-radius:3px;color:var(--steel);border:1px solid var(--rule);}
+
+.kf-detail{background:var(--bg);border-left:3px solid var(--steel);
+  border-radius:0 var(--r) var(--r) 0;padding:11px 14px;margin-top:10px;
+  font-size:12.5px;color:var(--ink2);line-height:1.7;}
+.kf-detail b{color:var(--ink);font-weight:500;}
+.kf-detail code{font-family:var(--mono);font-size:11px;background:var(--white);
+  padding:1px 5px;border-radius:3px;border:1px solid var(--rule);color:var(--steel);}
+
+/* Methods grid */
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.mbox{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;
+  box-shadow:0 1px 4px rgba(26,46,90,.02);}
+.mbox-ttl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  color:var(--ink3);text-transform:uppercase;margin-bottom:7px;}
+.mbox-body{font-size:12.5px;color:var(--ink2);line-height:1.7;}
+.mbox-body b{color:var(--ink);font-weight:500;}
+.mbox-body code{font-family:var(--mono);font-size:11px;background:var(--bg);
+  padding:1px 5px;border-radius:3px;color:var(--steel);}
+
+/* Limitations - red */
+.lim-wrap{background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--rl);
+  padding:22px 24px;}
+.lim-wrap .p-sec-hdr{border-bottom-color:var(--red-bd);padding-bottom:12px;}
+.lim-wrap .p-sec-num{color:var(--red);}
+.lim-wrap .p-sec-ttl{color:var(--red);}
+.lim-wrap .p-sec-sub{color:var(--red-mid);}
+.lim-list{display:flex;flex-direction:column;}
+.lim-item{display:grid;grid-template-columns:20px 1fr;gap:10px;
+  padding:14px 0;border-bottom:1px solid var(--red-bd);}
+.lim-item:last-child{border-bottom:none;padding-bottom:0;}
+.lim-item:first-child{padding-top:4px;}
+.lim-dash{font-family:var(--mono);font-size:14px;color:var(--red-mid);padding-top:1px;font-weight:500;}
+.lim-head{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--red);margin-bottom:4px;letter-spacing:-.01em;line-height:1.4;}
+.lim-body{font-size:13px;color:var(--red-text);line-height:1.7;}
+.lim-body b{color:var(--red);font-weight:600;}
+.lim-body code{font-family:var(--mono);font-size:11.5px;background:rgba(255,255,255,.6);
+  padding:1px 5px;border-radius:3px;color:var(--red);border:1px solid var(--red-bd);}
+
+/* Perspective - accent box */
+.perspective-box{background:var(--accent-bg);border:1px solid var(--accent-bd);
+  border-radius:var(--rl);padding:22px 24px;}
+.perspective-box .p-sec-hdr{border-bottom-color:var(--accent-bd);padding-bottom:12px;}
+.perspective-box .p-sec-num{color:var(--accent);}
+.perspective-box .p-sec-ttl{color:var(--accent);}
+.perspective-list{display:flex;flex-direction:column;}
+.pers-item{padding:14px 0;border-bottom:1px solid var(--accent-bd);}
+.pers-item:last-child{border-bottom:none;padding-bottom:0;}
+.pers-item:first-child{padding-top:4px;}
+.pers-marker{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.pers-ico{width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--white);
+  font-family:var(--mono);font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;}
+.pers-head{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em;line-height:1.4;}
+.pers-body{font-size:13px;color:var(--ink2);line-height:1.7;padding-left:30px;}
+.pers-body b{color:var(--ink);font-weight:600;}
+.pers-body em{font-style:italic;color:var(--accent);}
+.pers-body code{font-family:var(--mono);font-size:11.5px;background:rgba(255,255,255,.7);
+  padding:1px 5px;border-radius:3px;color:var(--accent);border:1px solid var(--accent-bd);}
+
+/* SIDEBAR */
+.scard{background:var(--white);border:1px solid var(--rule);
+  border-radius:var(--rl);padding:16px;margin-bottom:12px;
+  box-shadow:0 2px 8px rgba(26,46,90,.03);}
+.scard-ttl{font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+  color:var(--ink4);text-transform:uppercase;margin-bottom:12px;
+  padding-bottom:8px;border-bottom:1px solid var(--rule);}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;
+  padding:7px 0;border-bottom:1px solid var(--rule);font-size:12px;color:var(--ink2);gap:8px;}
+.stat-row:last-child{border-bottom:none;}
+.stat-row b{font-family:var(--mono);color:var(--ink);font-weight:500;text-align:right;}
+.tag-list{display:flex;flex-wrap:wrap;gap:5px;}
+.stag{font-family:var(--mono);font-size:9px;padding:2px 8px;
+  border-radius:var(--rp);border:1px solid;letter-spacing:.04em;}
+.ext-link{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;border-radius:var(--r);border:1px solid var(--rule2);
+  font-size:12px;color:var(--ink2);text-decoration:none;
+  transition:all .15s;margin-bottom:6px;background:var(--bg);}
+.ext-link:last-child{margin-bottom:0;}
+.ext-link:hover{border-color:var(--steel);background:var(--steel-bg);color:var(--steel);}
+.ext-link-ico{font-family:var(--mono);font-size:10px;color:var(--ink4);}
+.ext-link:hover .ext-link-ico{color:var(--steel);}
+
+.stars-row{display:flex;gap:2px;align-items:center;}
+.s{font-size:16px;color:var(--rule2);}
+.s.on{color:#F5A623;}
+.stars-lbl{font-family:var(--mono);font-size:10px;color:var(--ink3);margin-left:6px;}
+.stars-note{font-family:var(--mono);font-size:10px;color:var(--ink4);margin-top:6px;font-style:italic;}
+
+.author-list{font-size:12px;color:var(--ink3);line-height:1.85;}
+.author-list b{color:var(--ink2);font-weight:500;}
+
+.added-badge{font-family:var(--mono);font-size:10px;color:var(--ink4);
+  background:var(--bg);border:1px solid var(--rule);border-radius:var(--r);
+  padding:4px 10px;display:inline-block;}
+
+/* Filed footer */
+.filed-footer{max-width:1200px;margin:0 auto;padding:40px 40px 60px;
+  border-top:1px solid var(--rule);margin-top:20px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.filed-l{font-family:var(--mono);font-size:11px;color:var(--ink3);}
+.filed-l b{color:var(--ink);font-weight:500;}
+.filed-r{display:flex;align-items:baseline;gap:2px;}
+.filed-r .rx{font-family:var(--brand);font-weight:800;font-size:13px;color:var(--ink);letter-spacing:-.02em;}
+.filed-r .sc{font-family:var(--serif);font-weight:600;font-style:italic;font-size:12px;color:var(--accent);letter-spacing:-.01em;}
+
+@media(max-width:900px){
+  .hero-wrap{grid-template-columns:1fr;padding:40px 24px 24px;gap:32px;}
+  .tldr-wrap{padding:0 24px;}
+  .body-wrap{grid-template-columns:1fr;padding:32px 24px 60px;gap:24px;}
+  .hdr{padding:0 24px;}
+  .method-grid{grid-template-columns:1fr;}
+  .hero-title{font-size:28px;}
+  .filed-footer{padding:32px 24px 48px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<header class="hdr">
+  <a class="hdr-brand" href="../index.html"><span class="rx">Rx</span><span class="sc">Scriptor</span></a>
+  <a class="hdr-back" href="../index.html">← 대시보드</a>
+  <span class="hdr-path"><b>briefs</b> / jo-mrna-cd8-2026</span>
+  <div class="hdr-right">
+    <a class="hdr-doi" href="https://doi.org/10.1038/s41586-026-10353-6" target="_blank" rel="noopener">DOI ↗</a>
+  </div>
+</header>
+
+<!-- HERO — Magazine spread: 좌측 텍스트 / 우측 인포그래픽 -->
+<div class="hero-wrap">
+  <div class="hero-left">
+    <div class="hero-brief-lbl">Brief No. 002 · 2026·04·16</div>
+    <div class="hero-cats">
+      <span class="hcat" style="background:var(--cat-vaccine-bg);color:var(--cat-vaccine);border-color:var(--cat-vaccine-bd);">vaccine</span>
+      <span class="hcat" style="background:var(--cat-mrna-bg);color:var(--cat-mrna);border-color:var(--cat-mrna-bd);">mRNA</span>
+    </div>
+    <h1 class="hero-title">mRNA vaccines engage <em>unconventional</em> pathways in CD8<sup>+</sup> T cell priming</h1>
+    <p class="hero-dek">cDNA·단백질 백신은 cDC1의 cross-presentation에 엄격히 의존하지만, mRNA-LNP 백신은 cDC1·cDC2를 중복(redundantly)으로 활용하고 <b>type I IFN 의존 cross-dressing</b>이라는 비전형 경로로 CD8<sup>+</sup> T cell을 priming한다.</p>
+    <div class="hero-meta">
+      <div class="hmeta-row"><span class="k">Journal</span><b class="hmeta-journal">Nature</b> · Article · 2026-04-15</div>
+      <div class="hmeta-row"><span class="k">1st Author</span>Suin Jo</div>
+      <div class="hmeta-row"><span class="k">Corresp.</span>William E. Gillanders · <b>Kenneth M. Murphy</b></div>
+      <div class="hmeta-row"><span class="k">Institute</span>Washington University in St. Louis</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="infographic">
+      <div class="ig-overlay">
+        <div class="ig-dot"></div>
+        <span class="ig-lbl">Main · Central Dogma</span>
+      </div>
+      <img src="../assets/infographic/jo-mrna-cd8-2026.png" alt="Central Dogma: conventional vaccines (cDC1-only) vs mRNA-LNP (cDC1+cDC2 redundant + cross-dressing via Type I IFN)">
+    </div>
+  </div>
+</div>
+
+<!-- In Brief -->
+<div class="tldr-wrap">
+  <div class="tldr-panel">
+    <div class="tldr-lbl">In Brief</div>
+    <div class="tldr-body">
+      <b>mRNA-LNP 백신의 CD8 T cell priming 경로는 전통 백신과 근본적으로 다르다.</b> ①cDC1·cDC2 <em>중복(redundant)</em> 활용, ②cDC 자체 MHC-I 발현 불필요, ③비조혈세포→cDC 간 peptide–MHC-I 전이(<em>cross-dressing</em>)가 type I IFN 의존적으로 실질 기여, ④injection site를 넘어 원거리 림프조직에서 systemic priming 발생, ⑤cDC1·cDC2 priming 모두 anti-tumor 및 memory formation 가능. 이는 mRNA 백신이 인코딩하지 않은 항원까지 CD8 반응을 유도할 수 있다는 근거로, COVID-19 백신의 비특이적 항암 효과 보고(Grippin et al., <i>Nature</i> 2025)와 기전적으로 연결된다.
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body-wrap">
+<div class="main-col">
+
+  <!-- SECTION I — KEY FINDINGS -->
+  <div class="section-block">
+    <div class="p-sec-hdr">
+      <span class="p-sec-num">I.</span>
+      <span class="p-sec-ttl">Key Findings</span>
+      <span class="p-sec-sub">primary observations</span>
+    </div>
+
+    <div class="kf-list">
+
+      <!-- Finding 01 -->
+      <div class="kf-card">
+        <div class="kf-card-hdr">
+          <span class="kf-num">01.</span>
+          <span class="kf-tag" style="background:var(--steel-bg);color:var(--steel);border-color:var(--steel-bd);">Antigen Presentation</span>
+        </div>
+        <h3 class="kf-head">cDC1 의존성 탈피 — mRNA-LNP는 cDC1·cDC2를 redundantly 활용</h3>
+        <div class="kf-body">
+          cDNA·단백질 백신은 <b>cDC1의 cross-presentation에 엄격히 의존</b>하여, cDC1 결손(<code>Δ32</code>) 마우스에서 tetramer<sup>+</sup>CD8 T 반응이 완전 소실됨. 반면 mRNA-LNP는 <code>Δ32</code>에서 WT 수준의 반응이 유지되고, cDC2 결손(<code>Δ1+2+3</code>)에서도 ~60% 수준 보존. 두 서브셋이 <em>독립·중복으로</em> CD8 T cell priming 수행 가능. <code>Wdfy4<sup>−/−</sup></code>에서도 반응이 정상으로, WDFY4 의존 cross-presentation 경로도 불필요함.
+        </div>
+        <div class="kf-detail">
+          <b>주요 검증 모델:</b> <code>Δ32</code>(+32 kb <i>Irf8</i> enhancer 결손 → cDC1 특이 결손), <code>Δ1+2+3</code>(−165 kb <i>Zeb2</i> enhancer의 C/EBPα 결합 site 삼중 돌연변이 → cDC2 특이 결손), <code>Δ32 × Δ1+2+3</code> 이중 결손. CD11c-DTR + DT 치료군에서는 tetramer<sup>+</sup>CD8 반응이 ~4.6%에서 0.3%로 소실 — cDC 자체는 여전히 필수임을 시사. 단, monocyte·macrophage 또는 injection site 근육세포에 의한 직접 priming은 배제됨(splenectomy + anti-CD62L 실험).
+        </div>
+      </div>
+
+      <!-- Finding 02 -->
+      <div class="kf-card">
+        <div class="kf-card-hdr">
+          <span class="kf-num">02.</span>
+          <span class="kf-tag" style="background:var(--accent-bg);color:var(--accent);border-color:var(--accent-bd);">Cross-dressing</span>
+        </div>
+        <h3 class="kf-head">Type I IFN 의존적 cross-dressing — 비조혈세포 peptide–MHC-I를 cDC가 포획</h3>
+        <div class="kf-body">
+          <code>Itgax-cre<sup>+</sup>B2m<sup>fl/fl</sup></code> 마우스(cDC 자체 MHC-I 결손)에서도 CD8 T cell priming이 정상 유지됨 — 즉 cDC가 <b>자기 MHC-I를 발현하지 않아도</b> priming이 가능. 완전 allogeneic BM chimera(BALB/c → B6)에서 donor cDC 표면에 recipient 유래 H2-K<sup>b</sup>가 물리적으로 검출(cDC2 ~20%, cDC1 ~10%). <code>anti-IFNAR1</code> blockade 시 tetramer<sup>+</sup>CD8 반응(<code>Δ32</code> 기준 28.7% → 3.1%) 및 H2-K<sup>b</sup> transfer 모두 감소 → <em>type I IFN 매개 cross-dressing</em> 경로.
+        </div>
+        <div class="kf-detail">
+          <b>Cross-dressing의 정량적 기여:</b> WT→TKO BM chimera(cDC가 peptide–MHC-I를 비조혈세포로부터 획득할 수 없는 조건)에서 OT-I proliferation 부분 감소 — direct/cross-presentation 경로 보존 상태에서도 cross-dressing이 기여함을 정량. <code>Δ32→TKO</code> chimera에서는 proliferation이 더 크게 감소(~50%) → <b>cDC2 주도 priming에서 cross-dressing 기여가 특히 큼</b>. MacNabb et al. 2022, Duong et al. 2022에서 보고된 종양 항원 cross-dressing과 기전적으로 연결됨.
+        </div>
+      </div>
+
+      <!-- Finding 03 -->
+      <div class="kf-card">
+        <div class="kf-card-hdr">
+          <span class="kf-num">03.</span>
+          <span class="kf-tag" style="background:var(--cat-vaccine-bg);color:var(--cat-vaccine);border-color:var(--cat-vaccine-bd);">Systemic Priming</span>
+        </div>
+        <h3 class="kf-head">Injection site를 넘어선 systemic priming — 원거리 림프조직에서도 CD8 활성화</h3>
+        <div class="kf-body">
+          i.m. 투여 후 OT-I 증식이 draining LN뿐 아니라 <b>원거리 spleen·contralateral LN·mesenteric LN에서도 draining LN과 유사한 수준</b>으로 관찰됨. 저용량(0.1 µg) OVA mRNA-LNP에서도 원거리 priming 확인. FTY720(S1PR1 작용제, 림프구 egress 차단) 투여 후에도 원거리 priming 유지 → draining LN에서 활성화된 T cell의 재순환이 아닌, <em>원거리 조직에서 독립적 priming</em>이 일어남을 시사.
+        </div>
+        <div class="kf-detail">
+          <b>기존 biodistribution 연구와의 차이:</b> 이전 PET-CT·luminescence 연구들은 mRNA 발현이 injection site·draining LN에 집중됨을 보고했으나(Bahl 2017, Hassett 2024, Buckley 2025), T cell은 수백 개의 peptide-MHC complex만으로도 활성화 가능(Sykulev et al. 1996)하므로 원거리 저발현도 면역학적으로 유의미. 기능적 biodistribution은 항원 발현량 biodistribution과 분리해 해석해야 함 — LNP 제형 개발 시 <em>발현 강도 외에 발현 분포의 면역학적 해석</em>이 필요한 근거.
+        </div>
+      </div>
+
+      <!-- Finding 04 -->
+      <div class="kf-card">
+        <div class="kf-card-hdr">
+          <span class="kf-num">04.</span>
+          <span class="kf-tag" style="background:var(--steel-bg);color:var(--steel);border-color:var(--steel-bd);">scRNA-seq</span>
+        </div>
+        <h3 class="kf-head">cDC1 vs cDC2 priming의 scRNA-seq transcriptome — clonal 확장 패턴 차이</h3>
+        <div class="kf-body">
+          58,461 세포 scRNA-seq + TCR-seq(TCRαβ pair 회수율 78.7%)로 11개 phenotypic cluster 식별. <b>cDC1이 주도하는 priming(<code>Δ1+2+3</code>)</b>은 <code>Klrg1<sup>+</sup>S1pr5<sup>+</sup></code> terminal effector 중심의 hyperexpanded clone 생성 — 강한 clonal 확장력. 반면 <b>cDC2가 주도하는 priming(<code>Δ32</code>)</b>은 cycling(Mki67<sup>+</sup>) 및 stem-like(<code>Tcf7<sup>+</sup>Slamf6<sup>+</sup></code>) 세포가 풍부한 분포 — memory 잠재력 관점에서 differentiated profile. 두 서브셋은 CD8 T cell의 <em>양적 생산력과 질적 특성을 달리 조절</em>함.
+        </div>
+        <div class="kf-detail">
+          <b>Memory 및 cytotoxicity:</b> 2차 접종 후 6주 시점 memory tetramer<sup>+</sup> 빈도는 WT·Δ32·Δ1+2+3 모두 유사. <code>Δ32</code>에서 CD127<sup>+</sup> memory 비율 상대적으로 높음(cDC2 priming → <em>memory 잠재성 우위</em>). In vivo cytotoxicity(SIINFEKL-loaded target 제거)는 세 군 모두 거의 100% 달성하나 <code>Δ1+2+3</code>에서 소폭 저하. cDC1·cDC2 priming이 동일 항원에 대해 <em>기능적으로는 동등하나 phenotype은 상이한 CD8 pool</em>을 만든다는 점은, 만성 항원 노출(tumor, chronic viral infection) 상황에서 다르게 작동할 가능성을 제시.
+        </div>
+      </div>
+
+      <!-- Finding 05 -->
+      <div class="kf-card">
+        <div class="kf-card-hdr">
+          <span class="kf-num">05.</span>
+          <span class="kf-tag" style="background:var(--cat-mrna-bg);color:var(--cat-mrna);border-color:var(--cat-mrna-bd);">Anti-tumor Function</span>
+        </div>
+        <h3 class="kf-head">cDC2 단독 priming도 종양 rejection 기능 보존 — 1956-mOVA 모델</h3>
+        <div class="kf-body">
+          <b>1956-mOVA</b> fibrosarcoma 모델(cDC1-dependent rejection으로 알려진 표준 모델) 사용. Dead mRNA-LNP 전처리 후 <code>Δ32</code>는 tumor rejection 실패(0/8 clear, 기존 cDC1 의존성 확인). 그러나 OVA mRNA-LNP 백신 후에는 <b>WT·Δ32 모두 8/8 tumor clearance 달성</b> — cDC2 단독으로도 anti-tumor CD8 T cell 기능 완전 보존. 종양 immunotherapy 맥락에서 cDC1 결손 환자·종양미세환경에서도 mRNA 백신이 효과 발휘 가능함을 시사.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION II — METHODS OVERVIEW -->
+  <div class="section-block">
+    <div class="p-sec-hdr">
+      <span class="p-sec-num">II.</span>
+      <span class="p-sec-ttl">Methods Overview</span>
+      <span class="p-sec-sub">experimental system</span>
+    </div>
+    <div class="method-grid">
+      <div class="mbox">
+        <div class="mbox-ttl">백신 플랫폼</div>
+        <div class="mbox-body">
+          <b>mRNA:</b> Cap 1 N1meΨ OVA mRNA (Innovac Therapeutics / PackGene), neoantigen mRNA(mLama4). <b>LNP:</b> SM-102 : cholesterol : DSPC : DMG-PEG2000 = 50 : 38.5 : 10 : 1.5 (molar). <b>투여:</b> 10 µg i.m. gastrocnemius, 0·7일, 11일 분석. 비교군: <code>pcDNA3.1-OVA</code> gene gun (4 µg × 3), OVA+AddaVax (10 µg i.m.).
+        </div>
+      </div>
+      <div class="mbox">
+        <div class="mbox-ttl">cDC 결손 모델</div>
+        <div class="mbox-body">
+          <code>Δ32</code>: +32 kb <i>Irf8</i> enhancer 결손 → cDC1 특이 결손. <code>Δ1+2+3</code>: −165 kb <i>Zeb2</i> enhancer의 C/EBPα binding site 삼중 돌연변이 → cDC2 결손. <code>Δ32 × Δ1+2+3</code>: 이중 결손(cDC1 + monocyte). <code>CD11c-DTR</code> + DT: 모든 cDC 급성 결손.
+        </div>
+      </div>
+      <div class="mbox">
+        <div class="mbox-ttl">MHC-I 조건부 결손</div>
+        <div class="mbox-body">
+          <code>Itgax-cre<sup>+</sup>B2m<sup>fl/fl</sup></code>: cDC-특이 β2M 결손 — cDC 자체 MHC-I 표면발현 소실. <code>MHC-I TKO</code>(<code>K<sup>b−/−</sup>D<sup>b−/−</sup>B2m<sup>−/−</sup></code>) ↔ SJL BM chimera: cDC의 자기 MHC-I 완전 제거. <b>BALB/c ↔ B6</b> allogeneic chimera: H-2K<sup>b</sup>/H-2K<sup>d</sup> 구분으로 cross-dressing 직접 검출.
+        </div>
+      </div>
+      <div class="mbox">
+        <div class="mbox-ttl">Readout</div>
+        <div class="mbox-body">
+          <b>CD8 T cell 반응:</b> SIINFEKL-K<sup>b</sup> tetramer staining, IFNγ ELISpot, OT-I adoptive transfer + CTV proliferation. <b>cDC 표면 MHC-I:</b> H2-K<sup>b</sup>/H2-K<sup>d</sup> flow, donor/recipient 구분. <b>Single-cell:</b> 10x Chromium GEM-X 5′ + TCR V(D)J (GSE296093). <b>종양 모델:</b> 1956-mOVA fibrosarcoma.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION III — LIMITATIONS (RED BOX) -->
+  <div class="section-block lim-wrap">
+    <div class="p-sec-hdr">
+      <span class="p-sec-num">III.</span>
+      <span class="p-sec-ttl">Limitations</span>
+      <span class="p-sec-sub">constraints & caveats</span>
+    </div>
+    <div class="lim-list">
+
+      <div class="lim-item">
+        <div class="lim-dash">—</div>
+        <div>
+          <div class="lim-head">마우스 모델 한정 — 인간 CD8 T cell 연관성 미검증</div>
+          <div class="lim-body">Δ32, Δ1+2+3 등 cDC 서브셋 특이 결손 모델이 모두 마우스 유전자 편집에 기반. 인간 cDC1/cDC2 계통은 전사 프로그램 및 부분적 subset 정의에서 마우스와 다르며, 본 연구 결과가 <b>임상 mRNA 백신(COVID-19·cancer neoantigen)</b>의 인간 CD8 반응에 어느 정도 적용되는지는 별도 검증 필요. 저자들도 <code>npj Vaccines</code>(Lobb 2026) 결과와의 상이한 해석을 discussion에서 언급.</div>
+        </div>
+      </div>
+
+      <div class="lim-item">
+        <div class="lim-dash">—</div>
+        <div>
+          <div class="lim-head">i.m. 경로 한정 — i.v. 경로와 상반된 결과 존재</div>
+          <div class="lim-body">모든 실험은 i.m. gastrocnemius 투여 기준. <b>Lobb et al. 2026 (npj Vaccines)</b>은 i.v. mRNA-LNP가 <em>cDC1에 의존적</em>이며 type I IFN에 의해 제한된다고 보고 — 투여 경로에 따라 cDC 의존성이 달라짐. 경로·LNP 조성·cytokine 유도 강도 중 어떤 변수가 기전 차이를 결정하는지 미해결. 실무적으로는 LNP 기반 cancer vaccine 개발 시 투여 경로 선택이 CD8 priming 기전을 결정적으로 바꿀 수 있음.</div>
+        </div>
+      </div>
+
+      <div class="lim-item">
+        <div class="lim-dash">—</div>
+        <div>
+          <div class="lim-head">Cross-dressing의 분자 기전·전이체 미규명</div>
+          <div class="lim-body">Cross-dressing이 기능적으로 기여함은 입증됐으나, 비조혈세포에서 cDC로 peptide–MHC-I가 <b>어떤 분자 매개체</b>(trogocytosis? 외막소포 EV/exosome? membrane contact?)로 전이되는지는 미규명. Type I IFN이 donor cell의 MHC-I 발현을 높이는지, cDC의 acquisition 기계를 활성화하는지, 아니면 둘 다인지도 불분명. 이 지점이 규명되면 cross-dressing을 <em>증강 또는 차단하는 제형 설계</em>가 가능해지므로 후속 연구 가치 큼.</div>
+        </div>
+      </div>
+
+      <div class="lim-item">
+        <div class="lim-dash">—</div>
+        <div>
+          <div class="lim-head">단일 LNP 조성(SM-102)에 국한 — ionizable lipid 일반화 불가</div>
+          <div class="lim-body">사용된 LNP는 <code>SM-102 : chol : DSPC : DMG-PEG2000 = 50:38.5:10:1.5</code> 단일 조성(Moderna 유래 표준). <b>ALC-0315</b>(Pfizer), <b>Lipid 5</b>, <b>C12-200</b>, 다양한 연구용 ionizable lipid 간 cross-dressing 유도 능력 차이는 검증되지 않음. Type I IFN 유도 강도와 cross-dressing 의존도가 lipid별로 상이할 가능성 — 비교 데이터 부재는 제형 간 면역학적 특성 분리를 어렵게 함.</div>
+        </div>
+      </div>
+
+      <div class="lim-item">
+        <div class="lim-dash">—</div>
+        <div>
+          <div class="lim-head">Cross-dressing의 비특이성 → 잠재적 immunopathology 미평가</div>
+          <div class="lim-body">Cross-dressing은 mRNA가 인코딩한 항원 외 <b>비조혈세포가 원래 제시하던 자기 peptide–MHC-I도 비특이적으로 전이</b>될 수 있는 기전. 저자들은 이를 "COVID-19 백신의 anti-tumor 효과 기전"으로 긍정적 해석하나, 동시에 <em>자가면역·off-target CD8 반응</em> 유도 가능성도 내재. 본 연구는 건강 마우스·단기 관찰에 한정 — 반복 접종·자가면역 소질 배경에서의 안전성 평가는 별도 필요.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION IV — PERSPECTIVE (DDS 관점) -->
+  <div class="section-block perspective-box">
+    <div class="p-sec-hdr">
+      <span class="p-sec-num">IV.</span>
+      <span class="p-sec-ttl">Perspective</span>
+      <span class="p-sec-sub">DDS researcher view</span>
+    </div>
+    <div class="perspective-list">
+
+      <div class="pers-item">
+        <div class="pers-marker">
+          <div class="pers-ico">1</div>
+          <div class="pers-head">LNP 제형이 면역반응의 "질"을 결정할 수 있다 — ionizable lipid 선택의 새로운 차원</div>
+        </div>
+        <div class="pers-body">
+          전통적으로 LNP 제형 설계의 primary endpoint는 <b>delivery efficiency(transfection, protein expression)</b>였음. 본 연구는 <code>SM-102</code> 기반 조성이 <em>IFN-I 유도 + cross-dressing 활성화</em>라는 비전형 면역 경로를 열어준다는 점을 보임. ionizable lipid의 pKa·hydrophobicity·geometry가 엔도좀 탈출뿐 아니라 <b>innate immune sensor 활성화(TLR, RIG-I, cGAS-STING) 및 IFN-I 강도</b>를 결정한다면, <em>cancer vaccine용 LNP</em>와 <em>protein replacement용 LNP</em>는 근본적으로 다른 lipid library에서 탐색되어야 함. LNPDB와 연계해 <em>면역원성 metric을 새로운 축으로 추가한 screening</em>이 자체 개발 파이프라인에 도입 가능.
+        </div>
+      </div>
+
+      <div class="pers-item">
+        <div class="pers-marker">
+          <div class="pers-ico">2</div>
+          <div class="pers-head">항원 설계 — cross-dressing이 열어주는 "비인코딩 항원 presentation" 전략</div>
+        </div>
+        <div class="pers-body">
+          Cross-dressing은 <b>mRNA가 인코딩하지 않은 항원</b>도 CD8 반응 대상으로 만들 수 있음을 의미. Cancer neoantigen 백신에서 이는 <em>양날의 검</em>: (+) 종양-특이 neoantigen을 인코딩한 mRNA 백신이 동시에 종양세포 표면의 다른 peptide도 함께 presentation 시켜 <b>broader T cell repertoire</b>를 유도 가능 — 단일 neoantigen 백신의 효능 한계를 넘을 수 있는 mechanism. (−) 동시에 off-target 항원 presentation으로 인한 반응 예측성 저하. 실무적으로는 mRNA 백신 PK/PD 모델에 <em>인코딩 항원 외 immunogenicity 지표</em>를 추가 고려해야 함.
+        </div>
+      </div>
+
+      <div class="pers-item">
+        <div class="pers-marker">
+          <div class="pers-ico">3</div>
+          <div class="pers-head">투여 경로 — i.m. vs i.v. 기전 상이성이 임상 설계에 주는 함의</div>
+        </div>
+        <div class="pers-body">
+          본 연구(i.m.)는 <b>cDC1-independent, cross-dressing-driven</b> 기전을 보였지만, Lobb et al. 2026 (i.v.)은 <b>cDC1-dependent</b> 기전을 보고 — 두 경로가 면역학적으로 다른 제품 프로파일을 만들 가능성. LNP-mRNA cancer vaccine 개발 시 투여 경로 선택은 단순 pharmacokinetics 문제가 아닌 <em>면역 priming 기전 선택</em>의 문제임. <b>다른 LNP 기반 protein therapeutics(i.v. 상용)</b>의 면역원성 평가 프로토콜이 <em>i.m. cancer vaccine</em>에 그대로 전용될 수 없음 — 투여 경로별 priming 기전 차이를 IND/CTD 문서 구성 시 명시적으로 다뤄야 함.
+        </div>
+      </div>
+
+      <div class="pers-item">
+        <div class="pers-marker">
+          <div class="pers-ico">4</div>
+          <div class="pers-head">Regulatory/안전성 — 비특이 MHC-I 전이의 off-target 면역반응 리스크 평가</div>
+        </div>
+        <div class="pers-body">
+          Cross-dressing은 본질적으로 <b>비특이적 peptide-MHC-I 전이</b> — 자가항원의 cDC presentation 가능성 및 <em>자가면역 유도 리스크</em>가 이론적으로 존재. 특히 (i) 반복 접종 요법(booster), (ii) 면역 불균형 환자군, (iii) 장기이식 수혜자, (iv) 자가면역 배경 환자에서 이 리스크가 임상적으로 증폭될 수 있음. 현재 mRNA 백신의 IND·pharmacovigilance 플랜은 대부분 이 기전을 명시적으로 평가하지 않음 — <em>cross-dressing–driven autoimmunity assay</em>를 preclinical 안전성 패키지에 선제적으로 포함하는 것이 향후 규제 환경 변화 대비 유리. 국내 식약처·FDA 모두 mRNA 제품 안전성 가이드라인 업데이트 추세와 맞물림.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /main-col -->
+
+<!-- SIDEBAR -->
+<aside>
+
+  <div class="scard">
+    <div class="scard-ttl">주요 수치</div>
+    <div class="stat-row"><span>scRNA-seq cells</span><b>58,461</b></div>
+    <div class="stat-row"><span>TCR αβ-paired</span><b>78.7%</b></div>
+    <div class="stat-row"><span>WT tetramer<sup>+</sup></span><b>~21%</b></div>
+    <div class="stat-row"><span>Δ1+2+3 반응</span><b>~60% WT</b></div>
+    <div class="stat-row"><span>cDC2 Kᵇ⁺ 획득</span><b>~20%</b></div>
+    <div class="stat-row"><span>α-IFNAR1 효과</span><b>–90%</b></div>
+  </div>
+
+  <div class="scard">
+    <div class="scard-ttl">협업 가능성</div>
+    <div class="stars-row">
+      <span class="s">★</span><span class="s">★</span>
+      <span class="s">★</span><span class="s">★</span>
+      <span class="s">★</span>
+      <span class="stars-lbl">— / 5</span>
+    </div>
+    <div class="stars-note">초안 검토 후 확정</div>
+  </div>
+
+  <div class="scard">
+    <div class="scard-ttl">실험 모델</div>
+    <div class="stat-row"><span>cDC1 결손</span><b>Δ32</b></div>
+    <div class="stat-row"><span>cDC2 결손</span><b>Δ1+2+3</b></div>
+    <div class="stat-row"><span>cDC MHC-I KO</span><b>Itgax-cre+B2m</b></div>
+    <div class="stat-row"><span>전역 cDC 결손</span><b>CD11c-DTR</b></div>
+    <div class="stat-row"><span>LNP 조성</span><b>SM-102</b></div>
+    <div class="stat-row"><span>Tumor 모델</span><b>1956-mOVA</b></div>
+  </div>
+
+  <div class="scard">
+    <div class="scard-ttl">태그</div>
+    <div class="tag-list">
+      <span class="stag" style="background:var(--cat-vaccine-bg);color:var(--cat-vaccine);border-color:var(--cat-vaccine-bd);">vaccine</span>
+      <span class="stag" style="background:var(--cat-mrna-bg);color:var(--cat-mrna);border-color:var(--cat-mrna-bd);">mRNA</span>
+    </div>
+  </div>
+
+  <div class="scard">
+    <div class="scard-ttl">연구 배경</div>
+    <div class="stat-row" style="font-size:11.5px;"><span>선행 — cDC1 cross-presentation</span></div>
+    <div class="stat-row" style="font-size:11px;color:var(--ink3);line-height:1.5;display:block;padding:4px 0 10px;border-bottom:1px solid var(--rule);">Hildner 2008 · Li 2012 — cDC1이 cDNA·protein 백신 CD8 priming에 필수</div>
+    <div class="stat-row" style="font-size:11.5px;"><span>유사 기전 — tumor cross-dressing</span></div>
+    <div class="stat-row" style="font-size:11px;color:var(--ink3);line-height:1.5;display:block;padding:4px 0 10px;border-bottom:1px solid var(--rule);">Duong 2022 · MacNabb 2022 — IFN-I 매개 cDC2 MHC-I-dressed anti-tumor CD8 반응</div>
+    <div class="stat-row" style="font-size:11.5px;"><span>상반 결과 — i.v. 경로</span></div>
+    <div class="stat-row" style="font-size:11px;color:var(--ink3);line-height:1.5;display:block;padding:4px 0 10px;border-bottom:1px solid var(--rule);">Lobb 2026 (npj Vaccines) — i.v. mRNA-LNP는 cDC1 의존, IFN-I가 반응 억제</div>
+    <div class="stat-row" style="font-size:11.5px;"><span>임상 연결</span></div>
+    <div class="stat-row" style="font-size:11px;color:var(--ink3);line-height:1.5;display:block;padding:4px 0 2px;border-bottom:none;">Grippin 2025 (Nature) — COVID-19 백신의 비특이적 anti-tumor ICB 증강 효과</div>
+  </div>
+
+  <div class="scard">
+    <div class="scard-ttl">외부 리소스</div>
+    <a class="ext-link" href="https://doi.org/10.1038/s41586-026-10353-6" target="_blank" rel="noopener">
+      <span>Nature 원문</span><span class="ext-link-ico">↗</span>
+    </a>
+    <a class="ext-link" href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE296093" target="_blank" rel="noopener">
+      <span>GEO GSE296093 (scRNA-seq)</span><span class="ext-link-ico">↗</span>
+    </a>
+    <a class="ext-link" href="https://pathology.wustl.edu/people/kenneth-m-murphy-md-phd/" target="_blank" rel="noopener">
+      <span>Murphy Lab (WashU)</span><span class="ext-link-ico">↗</span>
+    </a>
+    <a class="ext-link" href="https://surgery.wustl.edu/people/william-gillanders-m-d/" target="_blank" rel="noopener">
+      <span>Gillanders Lab (WashU)</span><span class="ext-link-ico">↗</span>
+    </a>
+  </div>
+
+  <div class="scard">
+    <div class="scard-ttl">저자 (* 공동 / † 교신)</div>
+    <div class="author-list">
+      <b>Suin Jo</b> — Pathology & Immunology, WashU<br>
+      <b>Lijin Li</b> — Surgery, WashU<br>
+      Chandrani Thakur, Kevin A. Telfer, Hussein Sultan, Ray A. Ohara …<br>
+      Monia Draghi, Nicholas M. Valiante (Innovac Therapeutics)<br>
+      Robert D. Schreiber, Gwendalyn J. Randolph, Naresha Saligrama, Theresa L. Murphy<br>
+      <span style="color:var(--ink4)">William E. Gillanders† · Kenneth M. Murphy†</span>
+    </div>
+  </div>
+
+  <div style="text-align:right">
+    <span class="added-badge">published 2026-04-15</span>
+  </div>
+
+</aside>
+
+</div><!-- /body-wrap -->
+
+<!-- FILED FOOTER -->
+<div class="filed-footer">
+  <div class="filed-l">
+    <b>Brief No. 002</b> · Ver 1.0 · Filed 2026-04-16 · Compiled from <i>Nature</i> s41586-026-10353-6
+  </div>
+  <div class="filed-r">
+    <span class="rx">Rx</span><span class="sc">Scriptor</span>
+  </div>
+</div>
+
+</body>
+</html>
