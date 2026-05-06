@@ -28,43 +28,60 @@
 literature-archive/
 ├── CLAUDE.md                           이 파일
 ├── README.md
-├── index.html                          대시보드 (검색·필터)
+├── index.html                          대시보드 (검색·필터, long-form 브리핑 등록)
 │
 ├── briefs/
-│   ├── jo-mrna-cd8-2026.html          슬러그: {firstauthor}-{topic}-{year}
-│   └── ...
+│   ├── jo-mrna-cd8-2026.html          [grandfathered v1 슬러그] long-form
+│   ├── lnpdb-2026.html                [grandfathered v1 슬러그] long-form
+│   ├── {slug}.html                    long-form (Clinical White, Hero+infographic+dashboard)
+│   └── quick/
+│       └── {slug}.md                  short-form (auto-generated, email 배포용)
 │
 └── assets/
     ├── infographic/
-    │   ├── jo-mrna-cd8-2026.png       16:9, Hero + 썸네일 겸용
+    │   ├── jo-mrna-cd8-2026.png       16:9, Hero + 썸네일 (long-form 전용)
     │   └── ...
     └── (공통 CSS/폰트, 있다면)
 ```
+
+**2-tier brief 정책 (2026-05-06~)**:
+- **Long-form HTML brief** — 매거진형 portfolio piece. 수동 작성, 인포그래픽 필요, dashboard 등록. Tier 2 큐레이션 결과.
+- **Quick Markdown brief** — `briefs/quick/{slug}.md`. zotero-curate KEEP → `태그` 후속에서 auto-generated. 동료 이메일 배포용 lightweight 산출물. 인포그래픽·dashboard 등록 없음. 후일 long-form으로 승격 가능.
 
 ---
 
 ## 3. 브리핑 작성 표준 (절대 준수)
 
-### 3-1. 슬러그 규칙
+### 3-1. 슬러그 규칙 (v2, 2026-05-06~)
 
 ```
-{firstauthor}-{topic}-{year}
+{firstauthor}-{year}-{journal-abbr}-{topic}
 ```
 
 **예시**:
-- Jo et al. 2026, mRNA CD8 → `jo-mrna-cd8-2026`
-- Lobb et al. 2026, i.v. LNP → `lobb-ivlnp-2026`
+- Marks et al. 2026, Nat Biotechnol, mRNA hepatocyte detargeting → `marks-2026-nat-biotechnol-hepatocyte-detarget`
+- Jo et al. 2026, Nature, mRNA CD8 → `jo-2026-nature-mrna-cd8`
+- Lobb et al. 2026, JCR, i.v. LNP → `lobb-2026-j-control-release-iv-lnp`
 
-**규칙**: 성 소문자, topic 1-2단어 하이픈 구분, year 4자리, 전부 소문자
+**규칙**:
+- 성 소문자
+- year 4자리
+- journal-abbr: Zotero `journalAbbreviation` 필드 → lowercase, dots/colons 제거, 공백 → 하이픈
+- topic: 1-2 핵심 키워드, 하이픈 구분
+- 전부 소문자
+
+**v1 슬러그 (grandfathered)**: `{firstauthor}-{topic}-{year}` — 2026-05-06 이전 작성된 `jo-mrna-cd8-2026.html`, `lnpdb-2026.html` 그대로 유지. 신규 brief는 v2로.
 
 ### 3-2. 파일 배치
 
 ```
-briefs/{slug}.html                      브리핑 페이지
-assets/infographic/{slug}.png           인포그래픽 (Hero + 썸네일)
+briefs/{slug}.html                      long-form 브리핑 (HTML)
+briefs/quick/{slug}.md                  short-form 브리핑 (Markdown, auto-generated)
+assets/infographic/{slug}.png           인포그래픽 (long-form 전용)
 ```
 
-SVG 초안, preview 파일은 로컬 임시 폴더만 (repo에 커밋 금지)
+SVG 초안, preview 파일은 로컬 임시 폴더만 (repo에 커밋 금지).
+Quick brief는 인포그래픽·dashboard 등록 없음 — 동료 이메일 배포용 lightweight 산출물.
 
 ### 3-3. Git 커밋 메시지
 
@@ -73,6 +90,74 @@ Add: {topic} brief ({primary-tag})
 ```
 
 예: `Add: mRNA-CD8 priming brief (vaccine)`
+Quick brief는: `Add: quick brief — {slug}` (예: `Add: quick brief — marks-2026-nat-biotechnol-hepatocyte-detarget`)
+
+---
+
+## 3a. Quick Markdown brief 표준 (auto-generated, 2026-05-06~)
+
+이메일 배포·자동 chain용 lightweight brief. zotero-curate skill의 `태그 keep` 후속 단계에서 `lib/zotero_to_brief.py` 헬퍼가 scaffold 생성, Claude가 5섹션을 채움.
+
+### 위치
+`briefs/quick/{slug}.md` (slug v2, §3-1)
+
+### 구조 (frontmatter + 5섹션, 고정)
+
+```markdown
+---
+slug: marks-2026-nat-biotechnol-hepatocyte-detarget
+title: "..."
+first_author: "Adam Marks"
+last_author: "Brian D. Brown"
+journal: "Nature Biotechnology"
+year: 2026
+doi: 10.1038/s41587-026-03099-z
+url: https://doi.org/10.1038/...
+zotero_key: VSFPIPVQ
+category: "LNP"
+keep_tag: keep/LNP
+generated_at: 2026-05-06
+---
+
+# {title}
+
+> {first_author} et al. ({year}, {journal})
+> DOI: [...] · Zotero: [`{key}`](zotero://select/items/{key})
+
+## 1. TL;DR
+3줄 이내. 핵심 발견·메커니즘·implication.
+
+## 2. Background & motivation
+1-2 단락.
+
+## 3. Key findings
+3-5개 data-bullet. 숫자·N·모델 인용.
+
+## 4. Implication for our LNP work
+사내 맥락 인지하며 작성하되 **회사명·코드명 노출 금지** (Public repo).
+
+## 5. Limitations / open questions
+3-5개 bullet.
+```
+
+### 작성 원칙
+- 한국어 primary, 과학·의학 용어 영문 병기 (전사 CLAUDE.md §2 따름)
+- 본론 우선, 서두 garnish 금지
+- §4 implication에서 회사 보안 게이트 (회사명·내부 코드명 절대 금지)
+- **§3 Key findings + §5 Limitations는 fulltext 기반 작성이 디폴트**. abstract만으로 작성 시 §3에 specific data (N, %, miRNA seed, assay 명) 누락되고 §5는 design critique 대신 generic limitation에 그침. PDF attachment가 Zotero에 있으면 helper `--fulltext` 플래그로 indexed text를 sidecar fetch
+- abstract만으로 작성한 bullet은 명시 표시 (`(abstract only — full text 검토 필요)`) 해서 신뢰도 차이를 독자가 인지
+
+### 자동 chain 흐름
+1. zotero-curate Mode A → KEEP 판정
+2. 사용자 `태그 keep` 입력 → Zotero에 `keep/<cat>` write
+3. **brief scaffold + fulltext sidecar 동시 fetch** (`--fulltext` 디폴트 ON when PDF 있음):
+   - Scaffold → `briefs/quick/{slug}.md` (frontmatter + 빈 5섹션)
+   - Fulltext → `.claude/tmp/fulltext/<key>.txt` (sidecar, **git-ignored** — 저작권/저장소 비대 회피)
+4. Claude가 sidecar fulltext + abstract를 모두 참조하여 5섹션 채움 → brief.md write
+5. 이메일 draft 생성 (Outlook_LLM_Drafter 경로)
+6. 사용자 수동 검토 → send
+
+Long-form HTML brief 승격은 별도 수동 작업 (필수 아님).
 
 ---
 
@@ -254,3 +339,4 @@ Labels only where necessary (DM Mono style).
 | 날짜 | 변경 |
 |------|------|
 | 2026-04-16 | 초기 작성. Jo et al. 2026 브리핑 작업에서 정립된 L1 표준 반영 |
+| 2026-05-06 | v2 슬러그 도입 (year + journal-abbr 포함). Quick Markdown brief tier 추가 (§3a). 기존 HTML brief 2개 grandfathered. zotero-curate skill 자동 chain 진입점 정의 |
