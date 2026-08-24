@@ -22,29 +22,8 @@
 
 ---
 
-## 2. 디렉토리 구조 (유지)
+## 2. 2-tier brief 정책 (2026-05-06~)
 
-```
-literature-archive/
-├── CLAUDE.md                           이 파일
-├── README.md
-├── index.html                          대시보드 (검색·필터, long-form 브리핑 등록)
-│
-├── briefs/
-│   ├── jo-mrna-cd8-2026.html          [grandfathered v1 슬러그] long-form
-│   ├── lnpdb-2026.html                [grandfathered v1 슬러그] long-form
-│   ├── {slug}.html                    long-form (Clinical White, Hero+infographic+dashboard)
-│   └── quick/
-│       └── {slug}.md                  short-form (auto-generated, email 배포용)
-│
-└── assets/
-    ├── infographic/
-    │   ├── jo-mrna-cd8-2026.png       16:9, Hero + 썸네일 (long-form 전용)
-    │   └── ...
-    └── (공통 CSS/폰트, 있다면)
-```
-
-**2-tier brief 정책 (2026-05-06~)**:
 - **Long-form HTML brief** — 매거진형 portfolio piece. 수동 작성, 인포그래픽 필요, dashboard 등록. Tier 2 큐레이션 결과.
 - **Quick Markdown brief** — `briefs/quick/{slug}.md`. zotero-curate KEEP → `태그` 후속에서 auto-generated. 동료 이메일 배포용 lightweight 산출물. 인포그래픽·dashboard 등록 없음. 후일 long-form으로 승격 가능.
 
@@ -74,11 +53,7 @@ literature-archive/
 
 ### 3-2. 파일 배치
 
-```
-briefs/{slug}.html                      long-form 브리핑 (HTML)
-briefs/quick/{slug}.md                  short-form 브리핑 (Markdown, auto-generated)
-assets/infographic/{slug}.png           인포그래픽 (long-form 전용)
-```
+Long-form = `briefs/{slug}.html` + `assets/infographic/{slug}.png`, quick = `briefs/quick/{slug}.md`.
 
 SVG 초안, preview 파일은 로컬 임시 폴더만 (repo에 커밋 금지).
 Quick brief는 인포그래픽·dashboard 등록 없음 — 동료 이메일 배포용 lightweight 산출물.
@@ -96,49 +71,15 @@ Quick brief는: `Add: quick brief — {slug}` (예: `Add: quick brief — marks-
 
 ## 3a. Quick Markdown brief 표준 (auto-generated, 2026-05-06~)
 
-이메일 배포·자동 chain용 lightweight brief. zotero-curate skill의 `태그 keep` 후속 단계에서 `lib/zotero_to_brief.py` 헬퍼가 scaffold 생성, Claude가 5섹션을 채움.
+이메일 배포·자동 chain용 lightweight brief. zotero-curate skill의 `태그 keep` 후속 단계에서 scaffold(frontmatter + 빈 5섹션)를 만들고 Claude가 5섹션을 채움. (전용 헬퍼 `lib/zotero_to_brief.py`는 **아직 미구현** — 현재는 zotero-curate skill이 직접 scaffold 작성. 본 repo에 `.py` 파일 없음.)
 
 ### 위치
 `briefs/quick/{slug}.md` (slug v2, §3-1)
 
 ### 구조 (frontmatter + 5섹션, 고정)
 
-```markdown
----
-slug: marks-2026-nat-biotechnol-hepatocyte-detarget
-title: "..."
-first_author: "Adam Marks"
-last_author: "Brian D. Brown"
-journal: "Nature Biotechnology"
-year: 2026
-doi: 10.1038/s41587-026-03099-z
-url: https://doi.org/10.1038/...
-zotero_key: VSFPIPVQ
-category: "LNP"
-keep_tag: keep/LNP
-generated_at: 2026-05-06
----
-
-# {title}
-
-> {first_author} et al. ({year}, {journal})
-> DOI: [...] · Zotero: [`{key}`](zotero://select/items/{key})
-
-## 1. TL;DR
-3줄 이내. 핵심 발견·메커니즘·implication.
-
-## 2. Background & motivation
-1-2 단락.
-
-## 3. Key findings
-3-5개 data-bullet. 숫자·N·모델 인용.
-
-## 4. Implication for our LNP work
-사내 맥락 인지하며 작성하되 **회사명·코드명 노출 금지** (Public repo).
-
-## 5. Limitations / open questions
-3-5개 bullet.
-```
+형식은 기존 brief를 그대로 따른다 — canonical 예시 `briefs/quick/marks-2026-nat-biotechnol-hepatocyte-detarget.md`.
+5섹션 = TL;DR / Background & motivation / Key findings / Implication for our LNP work / Limitations & open questions.
 
 ### 작성 원칙
 - 한국어 primary, 과학·의학 용어 영문 병기 (전사 CLAUDE.md §2 따름)
@@ -182,33 +123,9 @@ Long-form HTML brief 승격은 별도 수동 작업 (필수 아님).
 | 본문 | Pretendard Sans |
 | 수치·코드 | DM Mono |
 
-### 4-3. 구조 (5섹션 고정)
+### 4-3. 구조 (5섹션 고정) + Sidebar
 
-```
-Hero (magazine spread — 좌 텍스트 / 우 인포그래픽)
-  ↓
-In Brief (빨간 좌측 라인, 5포인트)
-  ↓
-§ I. Key Findings (카드 3-5개)
-  ↓
-§ II. Methods Overview (4-box)
-  ↓
-§ III. Limitations (red box, 3-5)
-  ↓
-§ IV. Perspective (DDS 관점, accent box, 3-4)
-  ↓
-Sidebar (수치/별점/모델/태그/배경/리소스/저자)
-```
-
-### 4-4. Sidebar 필수 항목
-
-- 수치 (Subjects, Cell count)
-- 별점 (1~5★, 미평가 가능)
-- 모델 (mouse, human)
-- 태그 (primary + secondary)
-- 배경 (Background 한 줄)
-- 리소스 (GEO, code)
-- 저자 (1st + corresponding)
+Hero → In Brief → Key Findings → Methods → Limitations → Perspective → Sidebar 순서 고정. 섹션별 레이아웃과 Sidebar 필수 항목(수치·별점·모델·태그·배경·리소스·저자)은 기존 long-form brief (`briefs/*.html`)를 canonical 예시로 그대로 따름 — §3a의 quick brief가 canonical 예시를 참조하는 방식과 동일.
 
 ---
 
@@ -253,19 +170,7 @@ Labels only where necessary (DM Mono style).
 
 ## 6. 대시보드 등록 (index.html)
 
-브리핑 작성 후 반드시 등록:
-
-| 필드 | 값 |
-|------|-----|
-| 제목 | 논문 full title (영문) |
-| 저널 | Nature, Cell 등 |
-| 발행연도 | 4자리 |
-| DOI | `10.xxxx/xxxxx` |
-| 브리핑 URL | `./briefs/{slug}.html` |
-| 이미지 URL | `./assets/infographic/{slug}.png` |
-| 태그 | primary 먼저, secondary 추가 |
-| 핵심 기여 | 3개 bullet |
-| 별점 | 1~5 (미평가 가능) |
+브리핑 작성 후 반드시 등록. 필드 구성(제목·저널·연도·DOI·URL 2종·태그·핵심 기여 3 bullet·별점)은 `index.html`의 기존 entry를 그대로 따름.
 
 ### 태그 원칙
 
@@ -315,11 +220,7 @@ Labels only where necessary (DM Mono style).
 
 ## 9. 현재 등록 브리핑
 
-| 슬러그 | 논문 | 발행 | 별점 |
-|--------|------|------|------|
-| `jo-mrna-cd8-2026` | Jo et al., mRNA vaccines & CD8 priming (Nature) | 2026 | 미평가 |
-
-(새 브리핑 추가 시 갱신)
+Canonical 목록 = `briefs/` (long-form HTML) + `briefs/quick/` (Markdown). `jo-mrna-cd8-2026`, `lnpdb-2026` 2종만 v1 grandfathered 슬러그.
 
 ---
 
@@ -332,11 +233,3 @@ Labels only where necessary (DM Mono style).
 | rxscriptor-research | 내부 연구 포털. Quarto 연동 검토 가능 |
 | rxscriptor-gcbp-design | 회사 디자인 (이 repo는 Clinical White만) |
 
----
-
-## 11. 변경 이력
-
-| 날짜 | 변경 |
-|------|------|
-| 2026-04-16 | 초기 작성. Jo et al. 2026 브리핑 작업에서 정립된 L1 표준 반영 |
-| 2026-05-06 | v2 슬러그 도입 (year + journal-abbr 포함). Quick Markdown brief tier 추가 (§3a). 기존 HTML brief 2개 grandfathered. zotero-curate skill 자동 chain 진입점 정의 |
